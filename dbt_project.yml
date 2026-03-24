@@ -65,8 +65,10 @@ vars:
     sales_receipt_line: "{{ source('quickbooks', 'sales_receipt_line') }}"
     sales_receipt: "{{ source('quickbooks', 'sales_receipt') }}"
     sales_receipt_tax_line: "{{ source('quickbooks','sales_receipt_tax_line') }}"    
+    tax_code: "{{ source('quickbooks','tax_code') }}"
     tax_agency: "{{ source('quickbooks','tax_agency') }}"
     tax_rate: "{{ source('quickbooks','tax_rate') }}"
+    tax_rate_detail: "{{ source('quickbooks','tax_rate_detail') }}"
     transfer: "{{ source('quickbooks', 'transfer') }}"
     vendor_credit_line: "{{ source('quickbooks', 'vendor_credit_line') }}"
     vendor_credit: "{{ source('quickbooks', 'vendor_credit') }}"
@@ -95,8 +97,10 @@ vars:
     using_sales_receipt_tax_line: false
     using_refund_receipt_tax_line: false
     using_invoice_tax_line: false
+    using_tax_code: false
     using_tax_agency: false
     using_tax_rate: false
+    using_tax_rate_detail: false
 
 analysis-paths: ["analysis"]
 clean-targets:

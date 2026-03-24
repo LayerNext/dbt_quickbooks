@@ -41,11 +41,13 @@ final as (
         cast(account_expense_class_id as {{ dbt.type_string() }}) as account_expense_class_id, 
         account_expense_billable_status,
         cast(account_expense_customer_id as {{ dbt.type_string() }}) as account_expense_customer_id,
+        account_expense_tax_amount,
         account_expense_tax_code_id,
         cast(item_expense_item_id as {{ dbt.type_string() }}) as item_expense_item_id,
         item_expense_billable_status,
         cast(item_expense_customer_id as {{ dbt.type_string() }}) as item_expense_customer_id,
         cast(item_expense_class_id as {{ dbt.type_string() }}) as item_expense_class_id,
+        item_expense_tax_code_id,
         amount,
         description,
         source_relation

@@ -841,6 +841,8 @@ sources:
             description: "{{ doc('class_id') }} with the account based expense purchase line."
           - name: account_expense_billable_status
             description: Status of the purchase billable.
+          - name: account_expense_tax_amount
+            description: "{{ doc('tax_amount') }}"
           - name: account_expense_tax_code_id
             description: Tax code reference associated to the purchase.
           - name: item_expense_item_id
@@ -849,6 +851,8 @@ sources:
             description: "{{ doc('class_id') }} with the item based expense purchase line."
           - name: item_expense_billable_status
             description: The billable status of the item based expense purchase line.
+          - name: item_expense_tax_code_id
+            description: Tax code reference associated to the item based expense purchase line.
           - name: amount
             description: "{{ doc('amount') }} the purchase."
           - name: description
@@ -1212,6 +1216,31 @@ sources:
           - name: sync_token
             description: The versioning token used to track updates to the tax agency record.
 
+      - name: tax_code
+        identifier: "{{ var('quickbooks_tax_code_identifier', 'tax_code') }}"
+        description: "{{ doc('tax_code_table') }}"
+        config:
+          enabled: "{{ var('using_tax_code', false) }}"
+        columns:
+          - name: id
+            description: "{{ doc('id') }} tax code."
+          - name: name
+            description: The name of the tax code.
+          - name: description
+            description: Description of the tax code.
+          - name: active
+            description: Indicates whether the tax code is currently active.
+          - name: purchase_tax_rate_id
+            description: The purchase-side tax rate reference associated with the tax code.
+          - name: sales_tax_rate_id
+            description: The sales-side tax rate reference associated with the tax code.
+          - name: taxable
+            description: Indicates whether the tax code applies tax.
+          - name: created_at
+            description: The timestamp when the tax code record was created.
+          - name: updated_at
+            description: The timestamp when the tax code record was last updated.
+
       - name: tax_rate
         identifier: "{{ var('quickbooks_tax_rate_identifier', 'tax_rate') }}"
         description: "{{ doc('tax_rate_table') }}"
@@ -1238,6 +1267,27 @@ sources:
             description: The timestamp when the tax rate record was created.
           - name: updated_at
             description: The timestamp when the tax rate record was last updated.
+
+      - name: tax_rate_detail
+        identifier: "{{ var('quickbooks_tax_rate_detail_identifier', 'tax_rate_detail') }}"
+        description: "{{ doc('tax_rate_detail_table') }}"
+        config:
+          enabled: "{{ var('using_tax_rate_detail', false) }}"
+        columns:
+          - name: id
+            description: "{{ doc('id') }} tax rate detail."
+          - name: tax_code_id
+            description: "{{ doc('id') }} tax code associated with the detail."
+          - name: tax_rate_id
+            description: "{{ doc('tax_rate_id') }}"
+          - name: rate_value
+            description: The percentage rate value used for the tax detail.
+          - name: tax_order
+            description: The order in which this rate is applied within the tax code.
+          - name: created_at
+            description: The timestamp when the tax rate detail was created.
+          - name: updated_at
+            description: The timestamp when the tax rate detail was last updated.
 
       - name: transfer
         identifier: "{{ var('quickbooks_transfer_identifier', 'transfer') }}"

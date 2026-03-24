@@ -868,6 +868,8 @@ models:
         description: Status of the purchase billable.
       - name: account_expense_customer_id
         description: The customer id associated with the account based expense purchase line
+      - name: account_expense_tax_amount
+        description: "{{ doc('tax_amount') }}"
       - name: account_expense_tax_code_id
         description: Tax code reference associated to the purchase.
       - name: item_expense_item_id
@@ -878,6 +880,8 @@ models:
         description: The class id associated with the item based expense purchase line. 
       - name: item_expense_customer_id
         description: The customer id associated with the item based expense purchase line.
+      - name: item_expense_tax_code_id
+        description: Tax code reference associated to the item based expense purchase line.
       - name: amount
         description: Monetary amount of the purchase.
       - name: description
@@ -1241,6 +1245,32 @@ models:
       - name: updated_at
         description: Timestamp for the last update of the tax agency record.
 
+  - name: stg_quickbooks__tax_code
+    description: "{{ doc('tax_code_table') }}"
+    columns:
+      - name: tax_code_id
+        description: "{{ doc('id') }} tax code."
+        tests:
+          - not_null
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: tax_code_name
+        description: Name of the tax code.
+      - name: description
+        description: Description of the tax code.
+      - name: active
+        description: Boolean indicating whether the tax code is active.
+      - name: purchase_tax_rate_id
+        description: "{{ doc('tax_rate_id') }} for the purchase side of the tax code."
+      - name: sales_tax_rate_id
+        description: "{{ doc('tax_rate_id') }} for the sales side of the tax code."
+      - name: taxable
+        description: Boolean indicating whether tax should be applied.
+      - name: created_at
+        description: Timestamp for when the tax code was created.
+      - name: updated_at
+        description: Timestamp for the last update of the tax code record.
+
   - name: stg_quickbooks__tax_rate
     description: "{{ doc('tax_rate_table') }}"
     columns:
@@ -1268,6 +1298,28 @@ models:
         description: Timestamp for when the tax rate was created.
       - name: updated_at
         description: Timestamp for when the tax rate was last updated.
+
+  - name: stg_quickbooks__tax_rate_detail
+    description: "{{ doc('tax_rate_detail_table') }}"
+    columns:
+      - name: tax_rate_detail_id
+        description: "{{ doc('id') }} tax rate detail."
+        tests:
+          - not_null
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: tax_code_id
+        description: "{{ doc('id') }} tax code associated with the tax rate detail."
+      - name: tax_rate_id
+        description: "{{ doc('tax_rate_id') }}"
+      - name: rate_value
+        description: Percentage rate used for the tax rate detail.
+      - name: tax_order
+        description: Order in which the rate is applied within the tax code.
+      - name: created_at
+        description: Timestamp for when the tax rate detail was created.
+      - name: updated_at
+        description: Timestamp for when the tax rate detail was last updated.
 
 
   - name: stg_quickbooks__transfer

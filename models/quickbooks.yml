@@ -124,6 +124,21 @@ models:
       Table that provides additional classifications necessary for the cash flow statement, like the 
       cash flow type and ordinals.
 
+  - name: int_quickbooks__purchase_line_tax_calc
+    description: >
+      Table that calculates provisional purchase tax at the purchase-line level using available line tax fields
+      and optional tax configuration metadata.
+
+  - name: int_quickbooks__purchase_tax_reconciliation
+    description: >
+      Table that reconciles summed purchase-line tax calculations back to the posted purchase tax totals and
+      determines whether a purchase can use line-level tax rows or needs a fallback posting.
+
+  - name: int_quickbooks__purchase_tax_reconciled_lines
+    description: >
+      Table that produces the final purchase tax rows used by the purchase double-entry model after reconciliation
+      to posted purchase tax totals.
+
   - name: quickbooks__ap_ar_enhanced
     description: "{{ doc('ap_ar_enhanced_table') }}"   
     columns:

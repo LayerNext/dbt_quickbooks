@@ -17,13 +17,8 @@ purchase_lines as (
 
 purchase_tax_lines as (
 
-    select purchase_id,
-        source_relation,
-        index + 10000 as index,
-        tax_rate_id,
-        amount,
-        tax_percent
-    from {{ ref('stg_quickbooks__purchase_tax_line') }}
+    select *
+    from {{ ref('int_quickbooks__purchase_tax_reconciled_lines') }}
 ),
 {% endif %}
 
@@ -44,7 +39,7 @@ purchase_join as (
     select
         purchases.purchase_id as transaction_id,
         purchases.source_relation,
-        purchase_lines.index,
+        cast(purchase_lines.index as {{ dbt.type_string() }}) as index,
         purchases.transaction_date,
         purchase_lines.amount,
         case
@@ -78,20 +73,20 @@ purchase_join as (
     select
         purchase_tax_lines.purchase_id as transaction_id,
         purchase_tax_lines.source_relation,
-        purchase_tax_lines.index,
+        purchase_tax_lines.tax_row_index as index,
         purchases.transaction_date,
-        purchase_tax_lines.amount,
+        purchase_tax_lines.final_tax_amount as amount,
         case
             when purchases.currency_id = '{{ var('quickbooks__home_currency', '') }}'
-                then purchase_tax_lines.amount
-            else purchase_tax_lines.amount * coalesce(purchases.exchange_rate, 1)
+                then purchase_tax_lines.final_tax_amount
+            else purchase_tax_lines.final_tax_amount * coalesce(purchases.exchange_rate, 1)
         end as converted_amount,
-        coalesce(purchase_lines.account_expense_account_id, items.parent_expense_account_id, items.expense_account_id) as paid_to_account_id,
+        purchase_tax_lines.expense_account_id as paid_to_account_id,
         purchases.account_id as paid_from_account_id,
         case when coalesce(purchases.credit, false) = true then 'debit' else 'credit' end as paid_from_transaction_type,
         case when coalesce(purchases.credit, false) = true then 'credit' else 'debit' end as paid_to_transaction_type,
         purchases.customer_id,
-        coalesce(purchase_lines.item_expense_class_id, purchase_lines.account_expense_class_id) as class_id,
+        purchase_tax_lines.class_id,
         purchases.vendor_id,
         purchases.department_id,
         purchases.created_at,
@@ -100,12 +95,6 @@ purchase_join as (
     inner join purchases
         on purchases.purchase_id = purchase_tax_lines.purchase_id
         and purchases.source_relation = purchase_tax_lines.source_relation
-    inner join purchase_lines
-        on purchases.purchase_id = purchase_lines.purchase_id
-        and purchases.source_relation = purchase_lines.source_relation
-    left join items
-        on purchase_lines.item_expense_item_id = items.item_id
-        and purchase_lines.source_relation = items.source_relation
     {% endif %}
 ),
 
