@@ -143,7 +143,11 @@ final as (
                 *
                 (
                     {% if using_tax_rate %}
-                    coalesce(tax_rates.effective_tax_rate, tax_rates.rate_value, configured_lines.detail_rate_value)
+                    coalesce(
+                        cast(tax_rates.effective_tax_rate as {{ dbt.type_float() }}),
+                        tax_rates.rate_value,
+                        configured_lines.detail_rate_value
+                    )
                     {% else %}
                     configured_lines.detail_rate_value
                     {% endif %}
