@@ -11,6 +11,11 @@ We discussed two main approaches to fix this while still including purchase-rela
 
 This document compares the pros and cons of both.
 
+Current implementation decision:
+
+- the package implementation has been simplified to approach 1
+- approach 2 is retained here only as a design alternative
+
 ## Approach 1: Separate Tax Posting
 
 ### Summary

@@ -194,14 +194,6 @@ Table containing line-level tax entries associated with sales receipts.
 Table containing tax agency records. A tax agency in QuickBooks represents a government or regulatory entity to which taxes are reported and remitted.
 {% enddocs %}
 
-{% docs tax_code_table %}
-Table containing tax code records. A tax code in QuickBooks is a grouping of one or more tax rates and is used to determine how tax is applied to transactions.
-{% enddocs %}
-
-{% docs tax_rate_detail_table %}
-Table containing tax rate detail records. A tax rate detail links a tax code to one or more tax rates and helps describe how tax is applied to a transaction.
-{% enddocs %}
-
 {% docs tax_rate_table %}
 Table containing tax rate records. A tax rate in QuickBooks defines the percentage rate used to calculate tax for specific transactions.
 {% enddocs %}
